@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoreDuringExecution: # hard rule
+        - labelSelector:
+            matchExpressions:
+              - key: created_by
+                operator: In
+                values:
+                  - "HemanthKumar"
+              - key: architecture
+                operator: In
+                values:
+                  - "3-tier"
+          topologyKey: topology.kubernetes.io/zone
+      # preferedDuringSchedulingIgnoreDuringExecution:  # soft rule
+      #   - weight: 100
+      #     podAffinityTerm:
+      #       labelSelector:
+      #         matchExpressions:
+      #           - key: created_by
+      #             operator: In
+      #             values:
+      #               - "HemanthKumar"
+      #           - key: architecture
+      #             operator: In
+      #             values:
+      #               - "3-tier"
+      #       topologyKey: topology.kubernetes.io/zone
+  containers:
+    - name: nginx
+      image: nginx
